@@ -1,4 +1,30 @@
 import requests
+def getSubject(sbj,day,num):
+    sublist = []
+    lenn = len(sbj.get(day).get(num))
+    for i in range(lenn):
+        sublist.append(sbj.get(day).get(num)[i].get('sbj'))
+    return sublist
+def getTeachers(sbj,day,num):
+    sublist = []
+    lenn = len(sbj.get(day).get(num))
+    for i in range(lenn):
+        sublist.append(sbj.get(day).get(num)[i].get('teacher'))
+    return sublist
+def getData(sbj,day,num):
+    sublist = []
+    lenn = len(sbj.get(day).get(num))
+    for i in range(lenn):
+        sublist.append(sbj.get(day).get(num)[i].get('dts'))
+    return sublist
+def getRoomNumbers(sbj,day,num):
+    sublist = []
+    lenn = len(sbj.get(day).get(num))
+    for j in range(lenn):
+        lenn1 = len(sbj.get(day).get(num)[j].get('shortRooms'))
+        for i in range(lenn1):
+            sublist.append(sbj.get(day).get(num)[j].get('shortRooms')[i])
+    return sublist
 
 def get_data(num):
 
@@ -22,11 +48,7 @@ def get_data(num):
         'session': '0',
     }
 
-    response = requests.get('https://rasp.dmami.ru/site/group', params=params, headers=headers).json()
-
-    sbj = response.get('grid')
-
-
+    response = requests.get('https://rasp.dmami.ru/site/group', params=params, headers=headers).json().get('grid')
 
     for i in range(1,7):
         day =str(i)
@@ -36,21 +58,14 @@ def get_data(num):
         elif i == 4:print("Четверг")
         elif i == 5:print("Пятница")
         elif i == 6:print("Суббота")
-        for i in range(1,8):
-            num = str(i)
-            try:
-                print(num + ": " + sbj.get(day).get(num)[0].get('sbj')+" ("+sbj.get(day).get(num)[0].get('type')+'),', "Препод: "+sbj.get(day).get(num)[0].get('teacher'))
-            except:
-                print(num + ": " + "Пусто")
+        for j in range(1,8):
+            num = str(j)
+            print("Пары:",getSubject(response,day,num),'Даты:',getData(response,day,num),"Преподы:",getTeachers(response,day,num),'Аудитоия:',getRoomNumbers(response,day,num))
         print()
+
 
 def main():
     get_data('221-375')
 
 if __name__ == '__main__':
-    main()
-
-
-
-
-
+    get_data('221-376')
